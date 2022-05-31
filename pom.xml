@@ -28,7 +28,7 @@
                         <uri>https://anypoint.mulesoft.com</uri>
                         <muleVersion>4.4.0</muleVersion>
                         <username>Spreddy574</username>
-                        <password>Spreddy574</password>
+                        <password>Spreddy@574</password>
                         <applicationName>mulesoft-cicd</applicationName>
                         <environment>Sandbox</environment>
                         <workerType>MICRO</workerType>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="5b662bc4-7f71-4eba-940c-478c0f772901" basePath="/" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="4539bc7b-ebbf-40b3-879a-76d06f5f8de8" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<os:object-store name="Object_store" doc:name="Object store" doc:id="a387ea7e-6f30-40be-97cb-5033774befdd" />
+	<http:listener-config name="HTTP_Listener_config3333" doc:name="HTTP Listener config" doc:id="7d2fb376-3436-4768-b2e0-ae9205780bf3" >
+		<http:listener-connection host="localhost" port="3333" />
+	</http:listener-config>
+	<http:listener-config name="HTTP_Listener_config2222" doc:name="HTTP Listener config" doc:id="6a2656ae-16a6-40c5-ab0c-fb61d1a75657" >
+		<http:listener-connection host="localhost" port="2222" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration1" doc:name="HTTP Request configuration" doc:id="fad69102-35cd-4bed-967b-c2a22d39793b" >
+		<http:request-connection host="localhost" port="3333" />
+	</http:request-config>
+	<jms:config name="JMS_Config" doc:name="JMS Config" doc:id="67806d90-a2aa-4981-8d4f-dc4f9d90ae7e" >
+		<jms:active-mq-connection specification="JMS_2_0" >
+			<jms:caching-strategy >
+				<jms:default-caching sessionCacheSize="1024" />
+			</jms:caching-strategy>
+		</jms:active-mq-connection>
+	</jms:config>
+	<flow name="muledumpsexamplesFlow-60-and-34" doc:id="534d12cc-1833-45a1-a7a0-3f8d61e6b712" >
+		<http:listener doc:name="Listener" doc:id="8ac6c984-c638-4417-8e5a-fb8bf8fbc82e" config-ref="HTTP_Listener_config" path="*/status"/>
+		<set-payload value='#[{&#10;	"accounts": {&#10;		"account": {&#10;			"name":"Name",&#10;			"age": 23,&#10;		}&#10;	}&#10;}]' doc:name="Set Payload" doc:id="3ce66725-c3e6-4585-b1e5-5da3dacbc0f9" />
+		<logger level="INFO" doc:name="Logger" doc:id="ba048d9a-9f7c-4540-8265-682de243739c" message="#[typeOf(payload)]"/>
+	</flow>
+	<flow name="muledumpsexamplesFlow55" doc:id="7e039616-caa3-4414-af7e-f1d79035c339" >
+		<http:listener doc:name="Listener" doc:id="bcd4f9e0-9763-42a8-b731-ab092fb31661" config-ref="HTTP_Listener_config" path="/test"/>
+		<set-payload value="#[[70,65,100,60,85]]" doc:name="Set Payload" doc:id="7d953a6c-db30-4552-ba4e-fc84a5acef2d" />
+		<foreach doc:name="For Each" doc:id="fc14ff98-6060-47b3-a39c-3afb9188fdfc" collection="#[payload]">
+			<http:request method="GET" doc:name="Request" doc:id="248a9726-5c52-4b09-bb6d-8d3e678bce9b" config-ref="HTTP_Request_configuration" path="/updateTemp"/>
+		</foreach>
+	</flow>
+	<flow name="muledumpsexamplesFlow1-55" doc:id="32a1ff31-8cd6-42b0-a879-5f6934c40134" >
+		<http:listener doc:name="Listener" doc:id="e7c61e5f-213b-44cd-acd3-c0106c7dbf31" config-ref="HTTP_Listener_config" path="/updateTemp"/>
+		<os:store doc:name="Store" doc:id="99875c55-3b0d-42fd-9e98-a4d683f48b8e" key="temp" objectStore="Object_store"/>
+	</flow>
+	<flow name="muledumpsexamplesFlow2-55" doc:id="a93e625b-d898-4d8b-801e-1751f05b6c10" >
+		<http:listener doc:name="Listener" doc:id="2d53ce36-2d96-46ed-858e-df7c89f12a05" config-ref="HTTP_Listener_config" path="/getTemp"/>
+		<os:retrieve-all doc:name="Retrieve all" doc:id="5370b993-4669-4a8c-a88c-0c200d739c76" objectStore="Object_store"/>
+		<set-payload value="#[output application/json&#10;---&#10;payload]" doc:name="Set Payload" doc:id="50437939-aad7-4004-9f8d-b947cec63cca" />
+	</flow>
+	<flow name="muledumpsexamplesFlow-15" doc:id="f644a2b0-30b6-4954-8c83-fe046de65d3a" >
+		<http:listener doc:name="Listener" doc:id="c2959bbb-622b-4b20-ae75-e1bfcf2803fb" config-ref="HTTP_Listener_config" path="/test15"/>
+		<set-payload value='#[payload default "Blue"]' doc:name="Set Payload" doc:id="d2a41d42-3f8c-4dec-ad10-f426968e9806" />
+		<choice doc:name="Choice" doc:id="eff5a0d9-123b-401c-b0ea-2776c4ec9dd9" >
+			<when expression='#[payload contains "Red"]'>
+				<set-payload value="#['Blk']" doc:name="Set Payload" doc:id="3d8e71e8-0be4-4e91-8bf5-23330f5dd305" />
+			</when>
+			<when expression='#[payload contains "Blk"]'>
+				<set-payload value='#["Green"]' doc:name="Set Payload" doc:id="cf835c16-64c2-4606-b3e0-eb25463714db" />
+			</when>
+			<otherwise >
+				<set-payload value='#["Red"]' doc:name="Set Payload" doc:id="cb7cb126-f4a8-4870-bf62-5d534e477383" />
+				<flow-ref doc:name="Flow Reference" doc:id="8b29228d-4a27-4f13-a217-791f87492ae8" name="muledumpsexamplesFlow-15"/>
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="muledumpsexamplesFlow" doc:id="719c558c-d15a-4992-a7d6-6e087f33e0b0" >
+		<http:listener doc:name="Listener" doc:id="4771add9-65aa-481e-8a53-b5cd6b5a85d0" config-ref="HTTP_Listener_config2222" path="/"/>
+		<http:request method="GET" doc:name="Request" doc:id="909d6eeb-3593-4d1f-aeec-d2df8aa32173" config-ref="HTTP_Request_configuration1" path="/"/>
+	</flow>
+	<flow name="muledumpsexamplesFlow1" doc:id="c8a91a3f-6d97-4422-b908-a1b53dabc961" >
+		<http:listener doc:name="Listener" doc:id="0239ce75-ab41-4b2f-b24a-c7c34f85aec8" config-ref="HTTP_Listener_config3333" path="/"/>
+		<set-payload value="#[3333]" doc:name="Set Payload" doc:id="b4a4d7c3-b89d-4f8b-be31-d51acabed5cb" />
+	</flow>
+</mule>

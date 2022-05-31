@@ -22,13 +22,6 @@ http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/
 	<http:request-config name="HTTP_Request_configuration1" doc:name="HTTP Request configuration" doc:id="fad69102-35cd-4bed-967b-c2a22d39793b" >
 		<http:request-connection host="localhost" port="3333" />
 	</http:request-config>
-	<jms:config name="JMS_Config" doc:name="JMS Config" doc:id="67806d90-a2aa-4981-8d4f-dc4f9d90ae7e" >
-		<jms:active-mq-connection specification="JMS_2_0" >
-			<jms:caching-strategy >
-				<jms:default-caching sessionCacheSize="1024" />
-			</jms:caching-strategy>
-		</jms:active-mq-connection>
-	</jms:config>
 	<flow name="muledumpsexamplesFlow-60-and-34" doc:id="534d12cc-1833-45a1-a7a0-3f8d61e6b712" >
 		<http:listener doc:name="Listener" doc:id="8ac6c984-c638-4417-8e5a-fb8bf8fbc82e" config-ref="HTTP_Listener_config" path="*/status"/>
 		<set-payload value='#[{&#10;	"accounts": {&#10;		"account": {&#10;			"name":"Name",&#10;			"age": 23,&#10;		}&#10;	}&#10;}]' doc:name="Set Payload" doc:id="3ce66725-c3e6-4585-b1e5-5da3dacbc0f9" />
